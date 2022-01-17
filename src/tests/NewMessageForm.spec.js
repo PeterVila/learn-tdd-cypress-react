@@ -1,7 +1,7 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 /* eslint-disable testing-library/no-render-in-setup */
+import { cleanup, fireEvent, render } from "@testing-library/react";
 import React from "react";
-import { render, fireEvent, cleanup } from "@testing-library/react";
 import NewMessageForm from "../NewMessageForm";
 
 describe("<NewMessageForm />", () => {
@@ -10,8 +10,11 @@ describe("<NewMessageForm />", () => {
   afterEach(cleanup);
 
   describe("clicking the send button", () => {
+    let sendHandler;
+
     beforeEach(() => {
-      ({ getByTestId } = render(<NewMessageForm />));
+      sendHandler = jest.fn();
+      ({ getByTestId } = render(<NewMessageForm onSend={sendHandler} />));
 
       fireEvent.change(getByTestId("messageText"), {
         target: {
@@ -24,6 +27,10 @@ describe("<NewMessageForm />", () => {
 
     it("clears the text field", () => {
       expect(getByTestId("messageText").value).toEqual("");
+    });
+
+    it("calls the send handler", () => {
+      expect(sendHandler).toHaveBeenCalledWith("New message");
     });
   });
 });

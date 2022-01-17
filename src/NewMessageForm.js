@@ -1,17 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-const NewMessageForm = () => {
+export default function NewMessageForm({onSend}) {
+  const [input, setInput] = useState('');
+
+  const handleSend = e => {
+    onSend(input);
+    setInput('');
+  }
+
   return (
-    <div>
+    <div className="message-form">
       <input
         type="text"
         data-testid="messageText"
+        value={input}
+        onChange={e => setInput(e.target.value)}
       />
-      <button data-testid="sendButton">
+      <button
+        data-testid="sendButton"
+        onClick={handleSend}
+      >
         Send
       </button>
     </div>
   )
 }
-
-export default NewMessageForm
